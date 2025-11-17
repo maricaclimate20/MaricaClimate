@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Processa cada linha da planilha uma por uma
             for (const item of data) {
                 count++;
-                const address = item["Logradouro da ocorrência"];
+                const address = item["Logradouro da Ocorrência"];
 
                 if (address) {
                     
@@ -90,3 +90,4 @@ document.addEventListener("DOMContentLoaded", function() {
     });
 
 });
+
