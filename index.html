@@ -3,69 +3,1198 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Maricá Climate | Formulário</title>
-    <!-- Tailwind CSS para um design moderno e responsivo -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts: Inter -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>Maricá Climate</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="stylesite.css">
     <style>
-        /* Estilo customizado para a fonte e melhorias visuais */
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #F0FDF4; /* Um tom de verde claro */
-        }
+        /* Reset e Estilos Globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-color: #d32f2f;
+    --secondary-color: #b71c1c;
+    --accent-color: #ff6f00;
+    --warning-yellow: #ffd600;
+    --warning-orange: #ff6f00;
+    --warning-red: #d32f2f;
+    --info-blue: #1976d2;
+    --success-green: #388e3c;
+    --text-color: #333;
+    --light-bg: #f5f5f5;
+    --white: #ffffff;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s ease;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma,Verdana, sans-serif;
+    line-height: 1.6;
+    color: var(--text-color);
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Cabeçalho */
+.header {
+    background: var(--white);
+    box-shadow: var(--shadow);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    padding: 1rem 0;
+}
+
+.header .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.logo h1 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 0.2rem;
+}
+
+.logo p {
+    color: var(--secondary-color);
+    font-size: 0.9rem;
+}
+
+.nav ul {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+}
+
+.nav a {
+    text-decoration: none;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: var(--transition);
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.nav a:hover {
+    color: var(--primary-color);
+    background: var(--light-bg);
+}
+
+/* Seção Hero */
+.hero {
+    height: 600px;
+    background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), 
+                url('https://casaruralmarica.com/wp-content/uploads/2024/05/praia-guaratiba-1.webp') center/cover no-repeat;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--white);
+    position: relative;
+}
+
+.hero-overlay {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    padding: 2rem;
+    animation: fadeInUp 1s ease;
+}
+
+.hero h2 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 2rem;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.btn-primary {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    background: var(--accent-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1.1rem;
+    transition: var(--transition);
+    box-shadow: var(--shadow);
+}
+
+.btn-primary:hover {
+    background: #ff8533;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Seção de Alertas */
+.alertas {
+    padding: 2rem 0;
+    background: var(--light-bg);
+}
+
+.alerta-box {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.alerta-info {
+    background: linear-gradient(135deg, #1976d2, #1565c0);
+    color: var(--white);
+}
+
+.alerta-icon {
+    font-size: 3rem;
+    flex-shrink: 0;
+}
+
+.alerta-content h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.alerta-content p {
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Seção Sobre */
+.sobre {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.sobre h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 3rem;
+}
+
+.sobre-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.sobre-text p {
+    margin-bottom: 1.5rem;
+    text-align: justify;
+    line-height: 1.8;
+}
+
+.sobre-image img {
+    width: 100%;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.sobre-image img:hover {
+    transform: scale(1.05);
+}
+
+/* Tipos de Alertas */
+.tipos-alertas {
+    padding: 5rem 0;
+    background: var(--light-bg);
+}
+
+.tipos-alertas h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 3rem;
+}
+
+.alertas-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.alerta-card {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+    border-top: 5px solid;
+}
+
+.alerta-amarelo {
+    border-top-color: var(--warning-yellow);
+}
+
+.alerta-laranja {
+    border-top-color: var(--warning-orange);
+}
+
+.alerta-vermelho {
+    border-top-color: var(--warning-red);
+}
+
+.alerta-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.alerta-card-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+}
+
+.alerta-card h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.alerta-card p {
+    line-height: 1.8;
+    color: #666;
+}
+
+/* Galeria */
+.galeria {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.galeria h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 3rem;
+}
+
+.galeria-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.galeria-item {
+    position: relative;
+    overflow: hidden;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    cursor: pointer;
+}
+
+.galeria-item img {
+    width: 100%;
+    height: 300px;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.galeria-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+    padding: 2rem;
+    transform: translateY(100%);
+    transition: var(--transition);
+}
+
+.galeria-item:hover .galeria-overlay {
+    transform: translateY(0);
+}
+
+.galeria-item:hover img {
+    transform: scale(1.1);
+}
+
+.galeria-overlay h3 {
+    color: var(--white);
+    font-size: 1.5rem;
+}
+
+/* Seção Mapa */
+.mapa {
+    padding: 5rem 0;
+    background: var(--light-bg);
+}
+
+.mapa h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.mapa-descricao {
+    text-align: center;
+    font-size: 1.1rem;
+    color: var(--text-color);
+    margin-bottom: 3rem;
+}
+
+.mapa-container {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    margin-bottom: 2rem;
+}
+
+.mapa-container iframe {
+    border: none;
+}
+
+#map {
+    height: 600px; /* Mantendo a altura original do iframe */
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+}
+
+/* Estilos para o popup do Leaflet */
+.leaflet-popup-content-wrapper {
+    border-radius: 10px;
+    background-color: var(--white);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+.leaflet-popup-content {
+    color: var(--text-color);
+    font-size: 14px;
+    line-height: 1.6;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.leaflet-popup-content b {
+    color: var(--accent-color); /* Usando a cor de destaque do tema original */
+}
+
+.leaflet-popup-tip-container {
+    display: none;
+}
+
+
+.mapa-legenda {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.mapa-legenda h3 {
+    color: var(--primary-color);
+    margin-bottom: 1rem;
+}
+
+.mapa-legenda ul {
+    list-style: none;
+    display: flex;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.mapa-legenda li {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.legenda-ponto {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: inline-block;
+}
+
+.risco-alto {
+    background: var(--warning-red);
+}
+
+.risco-medio {
+    background: var(--warning-orange);
+}
+
+.ocorrencia {
+    background: var(--info-blue);
+}
+
+/* Seção Formulário */
+.formulario {
+    padding: 5rem 0;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: var(--white);
+}
+
+.formulario h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    margin-bottom: 1rem;
+}
+
+.formulario-descricao {
+    text-align: center;
+    font-size: 1.1rem;
+    margin-bottom: 3rem;
+}
+
+.formulario-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.formulario-info h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+}
+
+.formulario-info ul {
+    list-style: none;
+    margin-bottom: 2rem;
+}
+
+.formulario-info li {
+    padding: 0.8rem 0;
+    padding-left: 2rem;
+    position: relative;
+    font-size: 1.1rem;
+}
+
+.formulario-info li::before {
+    content: "✓";
+    position: absolute;
+    left: 0;
+    color: var(--warning-yellow);
+    font-weight: bold;
+    font-size: 1.3rem;
+}
+
+.dicas-box {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 1.5rem;
+    border-radius: 10px;
+    margin-top: 2rem;
+    border-left: 4px solid var(--warning-yellow);
+}
+
+.dicas-box h4 {
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.dicas-box p {
+    margin-bottom: 0.5rem;
+}
+
+.dicas-box ul {
+    margin-top: 1rem;
+}
+
+.dicas-box li {
+    font-size: 1rem;
+}
+
+.formulario-btn {
+    text-align: center;
+}
+
+.btn-formulario {
+    display: inline-block;
+    padding: 1.5rem 3rem;
+    background: var(--accent-color);
+    color: var(--white);
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1.2rem;
+    transition: var(--transition);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.btn-formulario:hover {
+    background: #ff8533;
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
+}
+
+.formulario-nota {
+    margin-top: 1.5rem;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Seção Contato */
+.contato {
+    padding: 5rem 0;
+    background: var(--white);
+}
+
+.contato h2 {
+    text-align: center;
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 3rem;
+}
+
+.contato-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+.contato-item {
+    background: var(--light-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.contato-item.emergencia {
+    background: linear-gradient(135deg, var(--warning-red), var(--secondary-color));
+    color: var(--white);
+}
+
+.contato-item:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.contato-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+}
+
+.contato-item h3 {
+    color: var(--primary-color);
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.contato-item.emergencia h3 {
+    color: var(--white);
+}
+
+.contato-item p {
+    color: var(--text-color);
+    line-height: 1.8;
+}
+.contato-item {
+    cursor: pointer;
+}
+
+.contato-item.emergencia p {
+    color: var(--white);
+}
+
+.destaque {
+    font-size: 2.5rem !important;
+    font-weight: bold !important;
+    margin: 1rem 0 !important;
+}
+
+.subtexto {
+    font-size: 0.9rem;
+    opacity: 0.8;
+}
+
+.outros-contatos {
+    background: var(--light-bg);
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+}
+
+.outros-contatos h3 {
+    color: var(--primary-color);
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.contatos-lista {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1rem;
+}
+
+.contato-linha {
+    padding: 1rem;
+    background: var(--white);
+    border-radius: 5px;
+    text-align: center;
+}
+
+.contato-linha strong {
+    color: var(--primary-color);
+}
+
+/* Rodapé */
+.footer {
+    background: var(--secondary-color);
+    color: var(--white);
+    padding: 2rem 0;
+    text-align: center;
+}
+
+.footer p {
+    margin: 0.5rem 0;
+}
+
+.footer-aviso {
+    margin-top: 1rem;
+    padding: 1rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+/* Animações */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Menu Responsivo */
+.menu-toggle {
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
+    color: var(--primary-color);
+    background: none;
+    border: none;
+}
+
+/* Quando a tela for menor que 768px */
+@media (max-width: 768px) {
+    .nav ul {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        background: var(--white);
+        box-shadow: var(--shadow);
+        position: absolute;
+        top: 70px;
+        left: 0;
+        padding: 1rem 0;
+    }
+
+    .nav ul.active {
+        display: flex;
+    }
+
+    .menu-toggle {
+        display: block;
+    }
+
+    .header .container {
+        flex-direction: row;
+        justify-content: space-between;
+    }
+}
+
+
     </style>
-</head>
-<body class="text-gray-800">
 
-    <div class="container mx-auto p-4 md:p-8 max-w-6xl">
-        
-        <header class="text-center mb-10">
-            <h1 class="text-4xl md:text-5xl font-bold text-green-700">Maricá Street</h1>
-            <p class="mt-2 text-lg text-gray-600">Preencha o formulário para registrar uma ocorrência.</p>
-        </header>
+    </head>
+<body>
+    <!-- Cabeçalho -->
+    <header class="header">
+        <div class="container">
+            <div class="logo">
+                <h1>Sistema de Alertas</h1>
+                <p>Maricá - RJ</p>
+            </div>
+            <nav class="nav">
+    <button class="menu-toggle">☰</button>
+    <ul>
+        <li><a href="#inicio">Início</a></li>
+        <li><a href="#sobre">Sobre</a></li>
+        <li><a href="#mapa">Mapa</a></li>
+        <li><a href="#relatar">Relatar</a></li>
+        <li><a href="#contato">Contato</a></li>
+    </ul>
+</nav>
 
-        <main class="flex justify-center">
-            
-            <!-- Seção do Formulário -->
-            <section id="form-section" class="bg-white p-6 rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 w-full max-w-3xl">
-            <center>
-                <h2 class="text-2xl font-semibold mb-4 text-green-600 border-b-2 border-green-200 pb-2" aligne="text-center">Registro de Ocorrência | <a href="mapa.html" target="_blank">[ Ver Mapa - Ocorrência ]</a>
-                </h2>
-            </center>
-                <!-- 
-                    INSTRUÇÃO: O link do seu formulário foi inserido abaixo. Se precisar alterar, basta trocar a URL no atributo 'src' do iframe.SS
-                -->
-                <div style="height: 1200px">
-                    <iframe 
-                        src="https://docs.google.com/forms/d/e/1FAIpQLSfiDq5DAgaPxP91xsFLNRkV8Uw1g6NrI35HMvnwVQBrV5ONsA/viewform?usp=dialog" 
-                        width="100%" 
-                        height="1200px" 
-                        frameborder="0" 
-                        marginheight="0" 
-                        marginwidth="0"
-                        class="rounded-lg"
-                        >Carregando…</iframe>
+        </div>
+    </header>
+
+    <!-- Seção Hero -->
+    <section id="inicio" class="hero">
+        <div class="hero-overlay">
+            <div class="hero-content">
+                <h2>Sistema de Alertas de Chuvas e Alagamentos</h2>
+                <p>Fique informado e proteja sua família dos desastres naturais em Maricá</p>
+                <a href="#relatar" class="btn-primary">Relatar Ocorrência</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alertas Importantes -->
+    <section class="alertas">
+        <div class="container">
+            <div class="alerta-box alerta-info">
+                <div class="alerta-icon">ℹ️</div>
+                <div class="alerta-content">
+                    <h3>Informação Importante</h3>
+                    <p>Mantenha-se atualizado sobre as condições climáticas em Maricá. Em caso de chuvas intensas, evite áreas de risco.</p>
                 </div>
-            </section>
+            </div>
+        </div>
+    </section>
 
-        </main>
+    <!-- Seção Sobre -->
+    <section id="sobre" class="sobre">
+        <div class="container">
+            <h2>Sobre o Sistema de Alertas</h2>
+            <div class="sobre-content">
+                <div class="sobre-text">
+                    <p>O Sistema de Alertas de Maricá foi criado para proteger a população contra os riscos de chuvas intensas, alagamentos e outros desastres naturais. Nossa missão é fornecer informações rápidas e precisas para que você possa tomar decisões seguras.</p>
+                    <p>Maricá possui extensão territorial de 361,572 km² e uma população de 197.300 pessoas. As inundações são o principal desastre natural em termos de perdas e danos no município. Quando ocorrem em áreas urbanas, a população e os bens expostos são mais impactados.</p>
+                    <p>Com uma geografia única, conformada como um grande anfiteatro natural, Maricá possui bacias hidrográficas inteiramente constituídas dentro do município. Essa configuração torna essencial o monitoramento constante das condições climáticas e dos pontos de alagamento.</p>
+                    <p>Através deste sistema, você pode visualizar áreas de risco, receber alertas em tempo real e contribuir relatando ocorrências em sua região. Juntos, podemos criar uma rede de proteção para toda a comunidade.</p>
+                </div>
+                <div class="sobre-image">
+                    <img src="https://www.qualviagem.com.br/wp-content/uploads/2016/06/barra_de_maric____vista_a__rea_06_08_2005_3.jpg" height="472" alt="Vista panorâmica de Maricá">
+                </div>
+            </div>
+        </div>
+    </section>
 
-        <footer class="text-center mt-12 text-gray-500">
-            <p>&copy; 2025 - Maricá Climate.</p>
-        </footer>
+    <!-- Tipos de Alertas -->
+    <section class="tipos-alertas">
+        <div class="container">
+            <h2>Tipos de Alertas</h2>
+            <div class="alertas-grid">
+                <div class="alerta-card alerta-amarelo">
+                    <div class="alerta-card-icon">⚠️</div>
+                    <h3>Alerta Amarelo</h3>
+                    <p>Chuvas moderadas previstas. Fique atento às atualizações e evite áreas conhecidas por alagamentos.</p>
+                </div>
+                <div class="alerta-card alerta-laranja">
+                    <div class="alerta-card-icon">🔶</div>
+                    <h3>Alerta Laranja</h3>
+                    <p>Chuvas intensas previstas. Evite deslocamentos desnecessários e mantenha-se em locais seguros.</p>
+                </div>
+                <div class="alerta-card alerta-vermelho">
+                    <div class="alerta-card-icon">🔴</div>
+                    <h3>Alerta Vermelho</h3>
+                    <p>Situação de emergência. Siga as orientações da Defesa Civil e evacue áreas de risco imediatamente.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Galeria de Imagens -->
+    <section class="galeria">
+        <div class="container">
+            <h2>Conheça Maricá</h2>
+            <div class="galeria-grid">
+                <div class="galeria-item">
+                    <img src="https://conhecamarica.com.br/roteirosturisticos/blob.contato.io/machine-user-images/Pedra-do-Elefante---Serra-da-Tiririca---Itaipua%C3%A7u-img-462992-20201105092633.jpg" alt="Paisagem de Maricá">
+                    <div class="galeria-overlay">
+                        <h3>Belezas Naturais</h3>
+                    </div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://www.marica.rj.gov.br/wp-content/uploads/2021/11/historia.png" alt="Vista aérea de Maricá">
+                    <div class="galeria-overlay">
+                        <h3>Vista Aérea</h3>
+                    </div>
+                </div>
+                <div class="galeria-item">
+                    <img src="https://casaruralmarica.com/wp-content/uploads/2024/05/praia-guaratiba-1.webp" alt="Praias de Maricá">
+                    <div class="galeria-overlay">
+                        <h3>Nossas Praias</h3>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Mapa -->
+    <section id="mapa" class="mapa">
+        <div class="container">
+            <h2>Mapa de Áreas de Risco e Ocorrências</h2>
+            <p class="mapa-descricao">Visualize em tempo real as áreas de risco, pontos de alagamento e ocorrências reportadas pela comunidade em Maricá.</p>
+                        <div class="mapa-container">
+                <div id="map"></div>
+            </div>
+            <div class="mapa-legenda">
+                <h3>Legenda do Mapa</h3>
+                <ul>
+                    <li><span class="legenda-ponto risco-alto"></span> Áreas de Alto Risco</li>
+                    <li><span class="legenda-ponto risco-medio"></span> Áreas de Risco Moderado</li>
+                    <li><span class="legenda-ponto ocorrencia"></span> Ocorrências Reportadas</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Formulário -->
+    <section id="relatar" class="formulario">
+        <div class="container">
+            <h2>Relatar Ocorrência</h2>
+            <p class="formulario-descricao">Sua colaboração é fundamental! Relate alagamentos, deslizamentos ou qualquer situação de risco em sua região.</p>
+            <div class="formulario-content">
+                <div class="formulario-info">
+                    <h3>Por que relatar?</h3>
+                    <ul>
+                        <li>Ajude a proteger sua comunidade</li>
+                        <li>Alerte outros moradores sobre riscos</li>
+                        <li>Auxilie as equipes de emergência</li>
+                        <li>Contribua para o mapeamento de áreas de risco</li>
+                        <li>Receba atualizações sobre sua região</li>
+                    </ul>
+                    <div class="dicas-box">
+                        <h4>⚡ Dicas de Segurança</h4>
+                        <p>Em caso de chuvas intensas:</p>
+                        <ul>
+                            <li>Evite áreas alagadas</li>
+                            <li>Não atravesse correntezas</li>
+                            <li>Desligue aparelhos elétricos</li>
+                            <li>Mantenha documentos em local seguro</li>
+                            <li>Siga orientações da Defesa Civil</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="formulario-btn">
+                    <a href="https://forms.gle/tMPZzgKUjp73AmYHA" target="_blank" class="btn-formulario">Relatar Agora</a>
+                    <p class="formulario-nota">Seu relato será analisado e poderá ser compartilhado no mapa de ocorrências.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção Contato -->
+    <section id="contato" class="contato">
+    <div class="container">
+        <h2>Contatos de Emergência</h2>
+        <div class="contato-grid">
+            <div class="contato-item emergencia" data-link="https://wa.me/+5521966282699">
+                <div class="contato-icon">🚨</div>
+                <h3>Defesa Civil</h3>
+                <p class="destaque">199</p>
+                <p>Emergências 24h</p>
+            </div>
+            <div class="contato-item" data-link="mailto:maricaclimate2.0@gmail.com">
+                <div class="contato-icon">📧</div>
+                <h3>Email</h3>
+                <p>maricaclimate@gmail.com</p>
+                <p class="subtexto">Relatos e informações</p>
+            </div>
+            <div class="contato-item" data-link="https://wa.me/5521972249914">
+                <div class="contato-icon">📞</div>
+                <h3>Telefone</h3>
+                <p>(21) 97224-9914</p>
+                <p class="subtexto">Horário comercial</p>
+            </div>
+            <div class="contato-item" data-link="https://maps.app.goo.gl/wMdDnRW7gqixNYtH7">
+                <div class="contato-icon">📍</div>
+                <h3>Endereço</h3>
+                <p>Prefeitura Municipal de Maricá</p>
+                <p class="subtexto">Maricá - RJ</p>
+            </div>
+        </div>
     </div>
+</section>
+
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 Sistema de Alertas de Chuvas e Alagamentos - Maricá, RJ</p>
+            <p>Desenvolvido para proteger e servir a comunidade de Maricá</p>
+            <p class="footer-aviso">⚠️ Em caso de emergência, ligue 199 (Defesa Civil) ou 193 (Bombeiros)</p>
+        </div>
+    </footer>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+    <script> // Scroll suave para links de navegação
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
+
+// Adicionar classe ativa ao menu durante scroll
+window.addEventListener('scroll', () => {
+    let current = '';
+    const sections = document.querySelectorAll('section');
+    const navLinks = document.querySelectorAll('.nav a');
+
+    sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        if (pageYOffset >= sectionTop - 200) {
+            current = section.getAttribute('id');
+        }
+    });
+
+    navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').substring(1) === current) {
+            link.classList.add('active');
+        }
+    });
+});
+
+// Animação de fade-in para elementos quando aparecem na tela
+const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -100px 0px'
+};
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+        }
+    });
+}, observerOptions);
+
+// Aplicar animação aos elementos
+document.addEventListener('DOMContentLoaded', () => {
+    const animatedElements = document.querySelectorAll('.sobre, .galeria, .mapa, .formulario, .contato');
+    
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(30px)';
+        el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
+        observer.observe(el);
+    });
+});
+
+// Adicionar efeito de hover no header ao scroll
+let lastScroll = 0;
+const header = document.querySelector('.header');
+
+window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > 100) {
+        header.style.padding = '0.5rem 0';
+        header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+    } else {
+        header.style.padding = '1rem 0';
+        header.style.boxShadow = '0 4px 6px rgba(0, 0, 0, 0.1)';
+    }
+    
+    lastScroll = currentScroll;
+});
+
+// Mensagem de confirmação ao clicar no botão do formulário
+document.addEventListener('DOMContentLoaded', () => {
+    const btnFormulario = document.querySelector('.btn-formulario');
+    if (btnFormulario) {
+        btnFormulario.addEventListener('click', (e) => {
+            // Pequeno delay para feedback visual
+            btnFormulario.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                btnFormulario.style.transform = 'scale(1)';
+            }, 100);
+        });
+    }
+});
+
+// Adicionar contador de visitantes (simulado)
+const addVisitorCounter = () => {
+    const footer = document.querySelector('.footer .container');
+    const counter = document.createElement('p');
+    const visits = Math.floor(Math.random() * 10000) + 5000;
+    counter.textContent = `Visitantes: ${visits.toLocaleString('pt-BR')}`;
+    counter.style.marginTop = '1rem';
+    counter.style.fontSize = '0.9rem';
+    counter.style.opacity = '0.8';
+    footer.appendChild(counter);
+};
+
+document.addEventListener('DOMContentLoaded', addVisitorCounter);
+
+// Preloader para imagens
+window.addEventListener('load', () => {
+    const images = document.querySelectorAll('img');
+    images.forEach(img => {
+        img.style.opacity = '0';
+        img.style.transition = 'opacity 0.5s ease';
+        
+        if (img.complete) {
+            img.style.opacity = '1';
+        } else {
+            img.addEventListener('load', () => {
+                img.style.opacity = '1';
+            });
+        }
+    });
+});
+
+// Adicionar efeito parallax suave no hero
+window.addEventListener('scroll', () => {
+    const hero = document.querySelector('.hero');
+    const scrolled = window.pageYOffset;
+    if (hero && scrolled < hero.offsetHeight) {
+        hero.style.backgroundPositionY = scrolled * 0.5 + 'px';
+    }
+});
+// Seleciona todos os containers de contato
+document.querySelectorAll('.contato-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const link = item.getAttribute('data-link'); // pega o link do atributo
+        if (link) {
+            window.open(link, '_blank'); // abre em nova aba
+        }
+    });
+});
+
+console.log('Maricá Climate - Maricá sempre quenrendo o melhor para os cidadões!');
+
+        // Script para o menu responsivo
+        document.querySelector('.menu-toggle').addEventListener('click', function() {
+            document.querySelector('.nav ul').classList.toggle('active');
+        });
+    
+
+    <!-- Scripts do Novo Mapa (Leaflet e PapaParse) -->
+        document.addEventListener("DOMContentLoaded", function( ) {
+            // URL de publicação direta da sua planilha
+            const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMIXzA-1ovgNfDo3rqbtAFVS8KozAPmvKaSbmUhRfQUXevWDP2Pgg1Ed9FLTNm2l2krWYq3OKtKiik/pub?gid=896511975&single=true&output=csv';
+            const urlComCacheBuster = `${sheetUrl}&t=${new Date( ).getTime()}`;
+
+            // Centraliza o mapa na sua cidade (Maricá)
+            // Coordenadas: [-22.9189, -42.8189]
+            const map = L.map('map').setView([-22.9189, -42.8189], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            } ).addTo(map);
+
+            // Função para converter endereço em coordenadas (Geocodificação)
+            async function geocodeAddress(address) {
+                try {
+                    // Adicionamos ", Maricá, RJ" para tornar a busca mais precisa
+                    const fullAddress = `${address}, Maricá, RJ`;
+                    const geoUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(fullAddress )}`;
+                    
+                    const response = await fetch(geoUrl);
+                    const geoData = await response.json();
+
+                    if (geoData && geoData.length > 0) {
+                        // Retorna as coordenadas do primeiro resultado encontrado
+                        return { lat: parseFloat(geoData[0].lat), lon: parseFloat(geoData[0].lon) };
+                    }
+                } catch (error) {
+                    console.error(`Erro ao geocodificar o endereço '${address}':`, error);
+                }
+                return null; // Retorna nulo se não encontrar o endereço ou se der erro
+            }
+
+            // --- MODIFICAÇÃO 1: Adicionando a função 'sleep' ---
+            // Esta função cria uma promessa que resolve após um tempo (ms)
+            const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+            Papa.parse(urlComCacheBuster, {
+                download: true,
+                header: true,
+                skipEmptyLines: true,
+                complete: async function(results) { // A função DEVE ser 'async' para o 'await' funcionar
+                    const data = results.data;
+                    let locationsFound = 0;
+                    let count = 0;
+
+                    console.log(`Iniciando geocodificação de ${data.length} endereços...`);
+
+                    // Processa cada linha da planilha uma por uma
+                    for (const item of data) {
+                        count++;
+                        const address = item["Logradouro da Ocorrência"];
+
+                        if (address) {
+                            
+                            // --- MODIFICAÇÃO 2: A Pausa ---
+                            // Espera 1 segundo (1000ms) ANTES de fazer a chamada
+                            // Isso respeita a política de uso do Nominatim (1 req/seg)
+                            console.log(`Processando item ${count}/${data.length}: "${address}". Aguardando 1 segundo...`);
+                            await sleep(1000); 
+                            
+                            const coords = await geocodeAddress(address);
+
+                            if (coords) {
+                                locationsFound++;
+                                const marker = L.marker([coords.lat, coords.lon]).addTo(map);
+                                
+                                let popupContent = '';
+                                for (const key in item) {
+                                    popupContent += `<b>${key}:</b> ${item[key]}  
+`;
+                                }
+                                // Adiciona as coordenadas encontradas ao popup para conferência
+                                popupContent += `<b>Coordenadas Encontradas:</b> ${coords.lat.toFixed(5)}, ${coords.lon.toFixed(5)}`;
+                                
+                                marker.bindPopup(popupContent);
+                                console.log(`...Endereço encontrado e marcador adicionado.`);
+                            } else {
+                                console.warn(`...Endereço NÃO encontrado para: "${address}"`);
+                            }
+                        }
+                    }
+
+                    console.log(`Geocodificação concluída. ${locationsFound} marcadores adicionados.`);
+                    if (locationsFound === 0 && data.length > 0) {
+                        alert("Planilha carregada, mas nenhum endereço pôde ser convertido em coordenadas.");
+                    }
+                },
+                error: function(error) {
+                    console.error('Erro ao processar o CSV:', error);
+                    alert(`Erro ao carregar os dados da planilha. Detalhe: ${error.message}`);
+                }
+            });
+
+        });
+    </script>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
+<!--pra fechar 1200 linha -->
